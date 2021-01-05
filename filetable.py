@@ -5,7 +5,7 @@ from datetime import datetime
 
 
 class FileTable(MyTable):
-    def __init__(self, parent):
+    def __init__(self, parent, id=wx.ID_ANY, pos=wx.DefaultPosition, size=wx.DefaultSize, style=wx.WANTS_CHARS, name=wx.grid.GridNameStr):
         super(FileTable, self).__init__(parent)
         self.CreateGrid(0, 3)
         self.EnableEditing(False)
@@ -119,7 +119,7 @@ class FileTable(MyTable):
             os.startfile(path)
 
     def setDrop(self, extension=''):
-        dtGrid = gridFileDropTarget(self)  # 将控件作为文件释放到的目标，这里是Grdi
+        dtGrid = gridFileDropTarget(self)  # 将控件作为文件释放到的目标
         dtGrid.setExts(extension)  # 限定扩展名
         self.SetDropTarget(dtGrid)  # 绑定拖拽
 

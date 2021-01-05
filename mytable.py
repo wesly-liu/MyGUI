@@ -4,7 +4,7 @@ import wx.grid
 from operator import itemgetter#用于二维列表排序
 
 class MyTable(wx.grid.Grid):
-    def __init__(self,parent):
+    def __init__(self,parent, id=wx.ID_ANY, pos=wx.DefaultPosition, size=wx.DefaultSize, style=wx.WANTS_CHARS, name=wx.grid.GridNameStr):
         super(MyTable,self).__init__(parent)
         
     def setList(self,target):
@@ -95,7 +95,7 @@ class MyFrame(wx.Frame):
         ls2=grid.getList()
         print(ls2)
         
-        grid.SetColumnsOrder(0)
+        # grid.SetColumnsOrder(0)
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(grid, 1, wx.EXPAND|wx.ALL, 5)
         p.SetSizer(sizer)
