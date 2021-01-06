@@ -2,6 +2,7 @@
 import wx
 import wx.grid
 from operator import itemgetter#用于二维列表排序
+import time,datetime
 
 class MyTable(wx.grid.Grid):
     def __init__(self,parent, id=wx.ID_ANY, pos=wx.DefaultPosition, size=wx.DefaultSize, style=wx.WANTS_CHARS, name=wx.grid.GridNameStr):
@@ -67,8 +68,8 @@ class MyTable(wx.grid.Grid):
             for j in range(0,col):
                 self.SetCellValue(currentRow+i,j,target[i][j])
                 
-    def SetOrderBy(self,column=0,desc=False,number=False):
-        '''按列排序'''
+    def SetOrderBy(self,column=0,desc=False,orderBy=0):
+        '''按列排序,orderBy 0=字符串，1=数字，2=日期'''
         currentCol=column
         result=[]
         row=self.GetNumberRows()
@@ -78,13 +79,21 @@ class MyTable(wx.grid.Grid):
             for j in range(0,col):
                 rowValue.append(self.GetCellValue(i,j))
             result.append(rowValue)
-        if number==True:
+        if orderBy==1:
             for r in result:
                 r[currentCol]=int(r[currentCol])
+        elif orderBy==2:
+            for r in result:
+                timeArray = time.strptime(r[currentCol], "%Y-%m-%d %H:%M:%S")
+                timeStamp = int(time.mktime(timeArray))
+                r[currentCol]=int(timeStamp)
         result.sort(key=itemgetter(currentCol),reverse=desc)
         for i in range(0,row):
             for j in range(0,col):
-                self.SetCellValue(i,j,str(result[i][j]))
+                if(j==column and orderBy==2):
+                    self.SetCellValue(i,j,str(datetime.datetime.fromtimestamp(result[i][j])))
+                else:
+                    self.SetCellValue(i,j,str(result[i][j]))
 
 #below are sample class and main        
 class MyFrame(wx.Frame):

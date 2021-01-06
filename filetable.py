@@ -68,11 +68,7 @@ class FileTable(MyTable):
 
     def OnGridLabelLeftClick(self, event):
         col = event.GetCol()
-        if col == 1:
-            num = True
-        else:
-            num = False
-        self.SetOrderBy(col, self.desc, num)
+        self.SetOrderBy(col, self.desc, orderBy=col)#Because column 0 is filename, 1 is size and it is number, 1 is datetime so it is 2
         self.desc = not self.desc
 
     def pasteFromClipboard(self, event):
@@ -89,7 +85,7 @@ class FileTable(MyTable):
             self.SetCellValue(i, 0, result[i])
             self.SetCellValue(i, 1, str(os.path.getsize(result[i])))
             self.SetCellValue(
-                i, 2, str(datetime.fromtimestamp(os.path.getmtime(result[i]))))
+                i, 2, str(datetime.fromtimestamp(int(os.path.getmtime(result[i])))))
 
     def clearContents(self, event):
         # self.ClearGrid()

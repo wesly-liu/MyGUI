@@ -127,7 +127,7 @@ class gridFileDropTarget(wx.FileDropTarget):  # 声明释放到的目标
                 self.window.SetCellValue(row, 0, "%s" % file)
                 self.window.SetCellValue(row, 1, str(os.path.getsize(file)))
                 self.window.SetCellValue(row, 2, str(
-                    datetime.fromtimestamp(os.path.getmtime(file))))
+                    datetime.fromtimestamp(int(os.path.getmtime(file)))))
                 row += 1
         filenames.clear()
 
