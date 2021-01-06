@@ -54,7 +54,7 @@
             <property name="window_style">wxTAB_TRAVERSAL</property>
             <property name="xrc_skip_sizer">1</property>
             <event name="OnActivate"></event>
-            <event name="OnActivateApp">uiOnActivateApp</event>
+            <event name="OnActivateApp">frmFileOnActivateApp</event>
             <event name="OnAuiFindManager"></event>
             <event name="OnAuiPaneButton"></event>
             <event name="OnAuiPaneClose"></event>
@@ -269,7 +269,7 @@
                                 <event name="OnRightUp"></event>
                                 <event name="OnSetFocus"></event>
                                 <event name="OnSize"></event>
-                                <event name="OnText">tCSizeOnText</event>
+                                <event name="OnText">tCEverythingSearchOnText</event>
                                 <event name="OnTextEnter"></event>
                                 <event name="OnTextMaxLen"></event>
                                 <event name="OnTextURL"></event>
@@ -443,7 +443,7 @@
                                         <property name="window_name"></property>
                                         <property name="window_style"></property>
                                         <event name="OnChar"></event>
-                                        <event name="OnCombobox"></event>
+                                        <event name="OnCombobox">cBExtOnCombobox</event>
                                         <event name="OnEnterWindow"></event>
                                         <event name="OnEraseBackground"></event>
                                         <event name="OnKeyDown"></event>
@@ -466,7 +466,7 @@
                                         <event name="OnSetFocus"></event>
                                         <event name="OnSize"></event>
                                         <event name="OnText"></event>
-                                        <event name="OnTextEnter"></event>
+                                        <event name="OnTextEnter">cBExtOnTextEnter</event>
                                         <event name="OnUpdateUI"></event>
                                     </object>
                                 </object>

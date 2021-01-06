@@ -31,6 +31,14 @@ class MyTable(wx.grid.Grid):
             result.append(ls)
         return result
     
+    def getColumnValue(self,col):
+        '''读取表格的制定col列并将内容写入到一个List里面'''
+        result=[]
+        row=self.GetNumberRows()
+        for i in range(0,row):
+            result.append(self.GetCellValue(i,col))
+        return result
+    
     def setRowCount(self,row):
         '''设置表的行数，列保持不变'''
         c=self.GetNumberCols()
