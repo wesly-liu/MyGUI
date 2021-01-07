@@ -9,6 +9,7 @@ Desktop.ini
 *.egg
 *.egg-info
 *.spec
+*.dll
 dist
 build
 .vscode
