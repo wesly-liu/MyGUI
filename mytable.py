@@ -37,7 +37,7 @@ class MyTable(wx.grid.Grid):
             ls=[]
             for j in range(0,col):
                 ls.append(self.GetCellValue(i,j))
-            result.append(tuple(ls))
+            result.add(tuple(ls))
         return result
     
     def getColumnValue(self,col):

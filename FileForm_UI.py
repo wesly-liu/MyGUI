@@ -50,7 +50,12 @@ class frmFile ( wx.Frame ):
 		
 		cBExtChoices = []
 		self.cBExt = wx.ComboBox( self, wx.ID_ANY, "", wx.DefaultPosition, wx.DefaultSize, cBExtChoices, wx.TE_PROCESS_ENTER )
+		self.cBExt.SetMinSize( wx.Size( 150,-1 ) )
 		bSizer21.Add( self.cBExt, 0, wx.ALL, 5 )
+  
+		self.cBSearchLANFiles = wx.CheckBox( self, wx.ID_ANY, u"SearchLANFiles", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.cBSearchLANFiles.SetValue(True) 
+		bSizer21.Add( self.cBSearchLANFiles, 0, wx.ALL, 5 )
 		
 		
 		bSizer3.Add( bSizer21, 0, wx.EXPAND, 5 )
@@ -112,6 +117,7 @@ class frmFile ( wx.Frame ):
 		self.tCEverythingSearch.Bind( wx.EVT_TEXT, self.tCEverythingSearchOnText )
 		self.cBExt.Bind( wx.EVT_COMBOBOX, self.cBExtOnCombobox )
 		self.cBExt.Bind( wx.EVT_TEXT_ENTER, self.cBExtOnTextEnter )
+		self.cBSearchLANFiles.Bind( wx.EVT_CHECKBOX, self.cBSearchLANFilesOnCheckBox)
 		self.bnOk.Bind( wx.EVT_BUTTON, self.bnOkOnButtonClick )
 		self.bnCancel.Bind( wx.EVT_BUTTON, self.bnCancelOnButtonClick )
 	
@@ -130,6 +136,9 @@ class frmFile ( wx.Frame ):
 		event.Skip()
 	
 	def cBExtOnTextEnter( self, event ):
+		event.Skip()
+  
+	def cBSearchLANFilesOnCheckBox( self, event ):
 		event.Skip()
 	
 	def bnOkOnButtonClick( self, event ):

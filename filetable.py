@@ -14,7 +14,7 @@ class FileTable(MyTable):
         self.SetMargins(0, 0)
 
         # Columns
-        self.SetColSize(0, 757)
+        self.SetColSize(0, 857)
         self.SetColSize(1, 96)
         self.SetColSize(2, 196)
         self.EnableDragColMove(False)
@@ -36,11 +36,17 @@ class FileTable(MyTable):
         self.popupmenu = wx.Menu()  # 创建一个菜单
         # 创建一个菜单项，这里前面的&和后面的\tCtrl+V只是为了显示有快捷键
         pasteMenu = self.popupmenu.Append(-1, "&Paste from clipboard\tCtrl+V")
+        copyMenu = self.popupmenu.Append(-1, "&Copy file\tCtrl+C")
+        copyPathMenu= self.popupmenu.Append(-1, "&Copy filename with path as text\tCtrl+Shift+C")
+        copyFileNameMenu= self.popupmenu.Append(-1, "Copy filename without path as text")
         openFolderMenu = self.popupmenu.Append(-1, "Open folder")
         self.Bind(wx.EVT_MENU, self.openFolder, openFolderMenu)  # 将菜单绑定给一个函数
         openFileMenu = self.popupmenu.Append(-1, "Open selected file")
         self.Bind(wx.EVT_MENU, self.openFile, openFileMenu)  # 将菜单绑定给一个函数
         self.Bind(wx.EVT_MENU, self.pasteFromClipboard, pasteMenu)
+        self.Bind(wx.EVT_MENU, self.copyFile, copyMenu)
+        self.Bind(wx.EVT_MENU, self.copyFilePath, copyPathMenu)
+        self.Bind(wx.EVT_MENU, self.copyFileName, copyFileNameMenu)
         removeSelectedMenu = self.popupmenu.Append(
             -1, "&Remove selected items\tDel")
         self.Bind(wx.EVT_MENU, self.removeSelected, removeSelectedMenu)
@@ -51,7 +57,9 @@ class FileTable(MyTable):
         accels = wx.AcceleratorTable([
             (wx.ACCEL_NORMAL, wx.WXK_DELETE, removeSelectedMenu.GetId()),
             (wx.ACCEL_CTRL, ord('V'), pasteMenu.GetId()),
-            (wx.ACCEL_CTRL, ord('A'), selectAllMenu.GetId())
+            (wx.ACCEL_CTRL, ord('A'), selectAllMenu.GetId()),
+            (wx.ACCEL_CTRL, ord('C'), copyMenu.GetId()),
+            (wx.ACCEL_CTRL|wx.ACCEL_SHIFT, ord('C'), copyPathMenu.GetId())
         ])  # 这里将所有的快捷键加入到一个list里
         self.SetAcceleratorTable(accels)  # 设置整个app使用这些快捷键
         self.Bind(wx.EVT_CONTEXT_MENU, self.OnShowPopup)
@@ -86,6 +94,34 @@ class FileTable(MyTable):
             self.SetCellValue(i, 1, str(os.path.getsize(result[i])))
             self.SetCellValue(
                 i, 2, str(datetime.fromtimestamp(int(os.path.getmtime(result[i])))))
+            
+    def copyFile(self, event):
+        '''拷贝选中的文件到剪贴板'''
+        ls = self.GetSelectedRows()
+        dataObj=wx.FileDataObject()
+        for i in ls:
+            dataObj.AddFile(self.GetCellValue(i,0))
+        wx.TheClipboard.SetData(dataObj)
+        
+    def copyFilePath(self, event):
+        '''拷贝选中的文件名连同路径作为字符串到剪贴板'''
+        ls = self.GetSelectedRows()
+        txt=''
+        for i in ls:
+            txt+=self.GetCellValue(i,0)+'\r\n'
+        dataObj=wx.TextDataObject()
+        dataObj.SetText(txt)
+        wx.TheClipboard.SetData(dataObj)
+        
+    def copyFileName(self, event):
+        '''拷贝选中的文件名连同路径作为字符串到剪贴板'''
+        ls = self.GetSelectedRows()
+        txt=''
+        for i in ls:
+            txt+=os.path.split(self.GetCellValue(i,0))[1]+'\r\n'
+        dataObj=wx.TextDataObject()
+        dataObj.SetText(txt)
+        wx.TheClipboard.SetData(dataObj)
 
     def clearContents(self, event):
         # self.ClearGrid()
@@ -122,6 +158,25 @@ class FileTable(MyTable):
     def setExts(self, extension):
         self.setDrop(extension)
         self.exts = extension
+        
+    def filterExts(self):
+        e=self.exts.split(',')
+        for ext in e:
+            e=ext.upper().strip()
+        exts=e
+        files=self.getColumnValue(0)
+        result=set()
+        i=0
+        self.clearRows()
+        for file in files:
+            if os.path.splitext(file)[1].upper() in exts:
+                self.AppendRows(1)
+                self.SetCellValue(i, 0, file)
+                self.SetCellValue(i, 1, str(os.path.getsize(file)))
+                self.SetCellValue( i, 2, str(datetime.fromtimestamp(int(os.path.getmtime(file)))))
+                i+=1
+            
+    
 
     # below are sample class and main
 

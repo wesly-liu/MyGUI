@@ -31,6 +31,7 @@ class Everything:
     
     #dll imports    
     def importDll(self,dllPath="Everything32.dll"):
+        '''导入Everything32.dll,文件必须在同一个目录'''
         if os.path.exists(dllPath):
             self.everything_dll = ctypes.WinDLL (dllPath)
             self.everything_dll.Everything_GetResultDateModified.argtypes = [ctypes.c_int,ctypes.POINTER(ctypes.c_ulonglong)]
@@ -111,6 +112,7 @@ class Everything:
         #return list
     
     def getResult(self,searchStr):
+        '''result是一个Tuple Set'''
         self.setupSearch(searchStr)
         self.executeSearch()
         self.getNumResult()

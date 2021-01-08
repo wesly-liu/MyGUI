@@ -9,9 +9,7 @@ class FileManager(FileForm):
         resizeJpgMenu = self.gDFiles.popupmenu.Append(-1, "Resize jpg file")
         self.gDFiles.Bind(wx.EVT_MENU, self.resizeJpg,
                           resizeJpgMenu)  # 将菜单绑定给一个函数
-        # self.cBExt.WriteText('.jpg')
-        # self.cBExt.SetEditable(False)
-        # self.gDFiles.setExts('.jpg')
+        
 
     def resizeJpg(self, event):
         # will finalize later

@@ -100,6 +100,7 @@ class listFileDropTarget(wx.FileDropTarget):  # 声明释放到的目标
             if file not in self.window.GetStrings():
                 self.window.AppendItems("%s" % file)
         filenames.clear()
+        return
 
     def setExts(self, exts):
         '''设置文件扩展名'''
@@ -130,6 +131,7 @@ class gridFileDropTarget(wx.FileDropTarget):  # 声明释放到的目标
                     datetime.fromtimestamp(int(os.path.getmtime(file)))))
                 row += 1
         filenames.clear()
+        return 0
 
     def setExts(self, exts):
         '''设置文件扩展名'''
