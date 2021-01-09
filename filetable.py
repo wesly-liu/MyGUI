@@ -3,9 +3,8 @@ from mytable import *
 from dropFiles import *
 from datetime import datetime
 
-
 class FileTable(MyTable):
-    def __init__(self, parent, id=wx.ID_ANY, pos=wx.DefaultPosition, size=wx.DefaultSize, style=wx.WANTS_CHARS, name=wx.grid.GridNameStr):
+    def __init__(self, parent,id=wx.ID_ANY, pos=wx.DefaultPosition, size=wx.DefaultSize, style=wx.WANTS_CHARS, name=wx.grid.GridNameStr):
         super(FileTable, self).__init__(parent)
         self.CreateGrid(0, 3)
         self.EnableEditing(False)
@@ -82,6 +81,12 @@ class FileTable(MyTable):
         # self.SetOrderBy(col, self.desc, orderBy=col)#Because column 0 is filename, 1 is size and it is number, 1 is datetime so it is 2
         # self.desc = not self.desc
 
+    # def setStatusbar(self,text):
+    #     try:
+    #         wx.CallAfter(self.window.setStatusbar(text))#这句是调用父进程的setStatusbar函数
+    #     except Exception as e:
+    #         print(str(e))
+
     def pasteFromClipboard(self, event):
         currentList = []
         for i in range(self.GetNumberRows()):
@@ -96,7 +101,7 @@ class FileTable(MyTable):
             self.SetCellValue(i, 0, result[i])
             self.SetCellValue(i, 1, str(os.path.getsize(result[i])))
             self.SetCellValue(
-                i, 2, str(datetime.fromtimestamp(int(os.path.getmtime(result[i])))))
+                i, 2, str(datetime.fromtimestamp(int(os.path.getmtime(result[i])))))       
             
     def copyFile(self, event):
         '''拷贝选中的文件到剪贴板'''

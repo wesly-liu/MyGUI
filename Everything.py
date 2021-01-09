@@ -5,6 +5,8 @@ import os.path
 import ctypes
 import datetime
 import struct
+import wx
+from threading import Thread
 
 #defines
 EVERYTHING_REQUEST_FILE_NAME = 0x00000001
@@ -25,9 +27,10 @@ EVERYTHING_REQUEST_HIGHLIGHTED_PATH = 0x00004000
 EVERYTHING_REQUEST_HIGHLIGHTED_FULL_PATH_AND_FILE_NAME = 0x00008000
 
 
-class Everything:
-    def __init__(self):
+class Everything(Thread):
+    def __init__(self,window):
         self.importDll()
+        self.window=window
     
     #dll imports    
     def importDll(self,dllPath="Everything32.dll"):
@@ -119,8 +122,9 @@ class Everything:
         # self.everything_dll.Everything_SetRequestFlags(77)
         self.executeSearch()
         self.getNumResult()
-        num=self.num_results
-        if self.num_results>3000:#大于3000条则只取3000条
+        resultCount=self.num_results
+        num=0
+        if resultCount>3000:#大于3000条则只取3000条
             num=3000
         else:
             num=self.num_results
@@ -136,8 +140,10 @@ class Everything:
             d=(fullName,str(self.file_size.value),self.get_time(self.date_modified_filetime))
             result.add(d)
             # d={"FileName":fileName,"FileDir":fileDir,"DateModified":self.get_time(self.date_modified_filetime),"FileSize":self.file_size.value}
-
-
+        try:
+            wx.CallAfter(self.window.setStatusbar,f'Total {resultCount} results find')#这句是调用父进程的setStatusbar函数
+        except Exception as e:
+            print(str(e))
         return result      
 
 if __name__=="__main__":

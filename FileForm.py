@@ -2,10 +2,12 @@ from FileForm_UI import *
 import Everything
 import timer
 import socket
+from threading import Thread
 
-class FileForm(frmFile):
-    def __init__(self, parent):        # 创建一个菜单项，这里前面的&和后面的\tCtrl+V只是为了显示有快捷键
-        super(FileForm, self).__init__(parent)
+class FilePanel(panFile,Thread):#继承Thread是为了在子进程调用父进程
+    def __init__(self,parent,window):        # 这里的window是父进程
+        super(FilePanel, self).__init__(parent)
+        self.window=window#self是为了在类内调用
         self.baseEverythingSearch='' 
         #获取本机IP
         hostname=socket.gethostname()
@@ -18,7 +20,7 @@ class FileForm(frmFile):
             self.baseEverythingSearch=' !10.86'
         self.cBExt.AppendItems(['.jpg', '.pdf', '.xls,.xlsx,.xlsm'])
         self.gDFiles.setExts('')
-        self.everything=Everything.Everything()
+        self.everything=Everything.Everything(self)
         self.everything.everything_dll.Everything_SetSort(14)
                
         self.timer = wx.Timer(self)#创建定时器
@@ -59,6 +61,12 @@ class FileForm(frmFile):
             self.baseEverythingSearch=''
         if len(self.tCEverythingSearch.GetValue())>=3:
             self.timer.StartOnce(100)
+            
+    def setStatusbar(self,text):
+        try:
+            wx.CallAfter(self.window.setStatusbar(text))#这句是调用父进程的setStatusbar函数
+        except Exception as e:
+            print(str(e))
     
     def OnTimer(self,event):
         d=self.everything.getResult(self.tCEverythingSearch.GetValue()+' '+self.cBExt.GetValue().replace(',','|') +self.baseEverythingSearch)
@@ -66,7 +74,8 @@ class FileForm(frmFile):
         self.gDFiles.appendList(d)
         self.gDFiles.SetOrderBy(self.col, self.desc , orderBy=self.col)#Because column 0 is filename, 1 is size and it is number, 1 is datetime so it is 2
         self.desc = not self.desc 
-        self.stStatus.SetStatusText(f'Total {len(d)} files')
+        # self.setStatusbar(f'Total {len(d)} files')
+        # self.stStatus.SetStatusText(f'Total {len(d)} files')
         
     def gDFilesOnGridLabelLeftClick(self, event ):
         col = event.GetCol()
@@ -93,14 +102,18 @@ class FileForm(frmFile):
 
  
 
-    def bnOkOnButtonClick(self, event):
-        pass
+    # def bnOkOnButtonClick(self, event):
+    #     pass
 
-    def bnCancelOnButtonClick( self, event ):
-        self.Close()
+    # def bnCancelOnButtonClick( self, event ):
+    #     self.Close()
 
 if __name__ == '__main__':
     app = wx.App()
-    frm = FileForm(None)
+    frm=wx.Frame(None)
+    panel = FilePanel(frm,None)
+    sizer=wx.BoxSizer( wx.VERTICAL )
+    sizer.Add(panel, 1, wx.ALL|wx.EXPAND, 5 )
+    frm.SetSizer(sizer)
     frm.Show()
     app.MainLoop()

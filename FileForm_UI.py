@@ -18,14 +18,12 @@ from filetable import *
 ## Class frmFile
 ###########################################################################
 
-class frmFile ( wx.Frame ):
+class panFile ( wx.Panel ):
 	
 	def __init__( self, parent ):
-		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"FileForm", pos = wx.DefaultPosition, size = wx.Size( 1600,648 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
+		# wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"FileForm", pos = wx.DefaultPosition, size = wx.Size( 1600,648 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
+		super(panFile, self).__init__(parent)
 		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
-  
-
-    
 		
 		bSizer1 = wx.BoxSizer( wx.VERTICAL )
 		bSizer2 = wx.BoxSizer( wx.HORIZONTAL )
@@ -50,6 +48,7 @@ class frmFile ( wx.Frame ):
 		self.cBSearchLANFiles.SetValue(True) 
 		bSizer21.Add( self.cBSearchLANFiles, 0, wx.ALL, 5 )
 		bSizer3.Add( bSizer21, 0, wx.EXPAND, 5 )
+		bSizer1.Add( bSizer3, 100, wx.EXPAND, 5 )
 		self.gDFiles = FileTable( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
 		
 		# Grid
@@ -73,34 +72,9 @@ class frmFile ( wx.Frame ):
 		self.gDFiles.SetDefaultCellAlignment( wx.ALIGN_LEFT, wx.ALIGN_TOP )
 		bSizer3.Add( self.gDFiles, 10, wx.ALL|wx.EXPAND, 5 )
 	
-		bSizer1.Add( bSizer3, 100, wx.EXPAND, 5 )
-		bSizer4 = wx.BoxSizer( wx.HORIZONTAL )
-		bSizer4.SetMinSize( wx.Size( -1,25 ) ) 
-		self.bnOk = wx.Button( self, wx.ID_ANY, u"Ok", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.bnOk.SetMinSize( wx.Size( -1,25 ) )
-		bSizer4.Add( self.bnOk, 0, wx.ALL, 5 )
-		self.bnCancel = wx.Button( self, wx.ID_ANY, u"Cancel", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.bnCancel.SetMinSize( wx.Size( -1,25 ) )
-		bSizer4.Add( self.bnCancel, 0, wx.ALL, 5 )
-		bSizer1.Add( bSizer4, 1, wx.ALL|wx.EXPAND, 5 )
 		self.SetSizer( bSizer1 )
 		self.Layout()
   
-		self.mainMenu = wx.MenuBar( 0 ) # 创建一个菜单
-		self.functionMenu = wx.Menu()
-		self.resizeImageMenu = wx.MenuItem( self.functionMenu, wx.ID_ANY, u"ResizeImage", wx.EmptyString, wx.ITEM_NORMAL )
-		self.functionMenu.AppendItem( self.resizeImageMenu )
-		self.pdf2ExcelMenaul = wx.MenuItem( self.functionMenu, wx.ID_ANY, u"Pdf2Excel", wx.EmptyString, wx.ITEM_NORMAL )
-		self.functionMenu.Append( self.pdf2ExcelMenaul )
-		self.searchExcelMenu = wx.MenuItem( self.functionMenu, wx.ID_ANY, u"SearchExcel", wx.EmptyString, wx.ITEM_NORMAL )
-		self.functionMenu.Append( self.searchExcelMenu )
-		self.batchRenameFunction = wx.MenuItem( self.functionMenu, wx.ID_ANY, u"batchRename", wx.EmptyString, wx.ITEM_NORMAL )
-		self.functionMenu.Append( self.batchRenameFunction )
-		self.mainMenu.Append( self.functionMenu, u"Function" ) 
-		self.SetMenuBar( self.mainMenu )
-  
-		self.stStatus=self.CreateStatusBar()#自动生成的Statusbar不好使，所以在这里创建了一个
-		
 		self.Centre( wx.BOTH )
 		
 		# Connect Events
@@ -110,13 +84,7 @@ class frmFile ( wx.Frame ):
 		self.cBExt.Bind( wx.EVT_TEXT_ENTER, self.cBExtOnTextEnter )
 		self.cBSearchLANFiles.Bind( wx.EVT_CHECKBOX, self.cBSearchLANFilesOnCheckBox)
 		self.gDFiles.Bind( wx.grid.EVT_GRID_LABEL_LEFT_CLICK, self.gDFilesOnGridLabelLeftClick )
-		self.bnOk.Bind( wx.EVT_BUTTON, self.bnOkOnButtonClick )
-		self.bnCancel.Bind( wx.EVT_BUTTON, self.bnCancelOnButtonClick )
-  
-		self.Bind( wx.EVT_MENU, self.resizeImageMenuOnMenuSelection, id = self.resizeImageMenu.GetId() )
-		self.Bind( wx.EVT_MENU, self.pdf2ExcelMenaulOnMenuSelection, id = self.pdf2ExcelMenaul.GetId() )
-		self.Bind( wx.EVT_MENU, self.searchExcelMenuOnMenuSelection, id = self.searchExcelMenu.GetId() )
-		self.Bind( wx.EVT_MENU, self.batchRenameFunctionOnMenuSelection, id = self.batchRenameFunction.GetId() )
+
 	
 	def __del__( self ):
 		pass
@@ -141,20 +109,4 @@ class frmFile ( wx.Frame ):
 	def gDFilesOnGridLabelLeftClick (self, event ):
 		event.Skip()
 	
-	def bnOkOnButtonClick( self, event ):
-		event.Skip()
-	
-	def bnCancelOnButtonClick( self, event ):
-		event.Skip()
-	
-	def resizeImageMenuOnMenuSelection( self, event ):
-		event.Skip()
 
-	def pdf2ExcelMenaulOnMenuSelection( self, event ):
-		event.Skip()
-
-	def searchExcelMenuOnMenuSelection( self, event ):
-		event.Skip()
-
-	def batchRenameFunctionOnMenuSelection( self, event ):
-		event.Skip()

@@ -81,6 +81,7 @@ class MyTable(wx.grid.Grid):
                 self.SetCellValue(currentRow+i,j,c)
                 j+=1
             i+=1
+        
         # for i in range(0,row):
         #     for j in range(0,col):
         #         self.SetCellValue(currentRow+i,j,target[i][j])
@@ -111,6 +112,8 @@ class MyTable(wx.grid.Grid):
                     self.SetCellValue(i,j,str(datetime.datetime.fromtimestamp(result[i][j])))
                 else:
                     self.SetCellValue(i,j,str(result[i][j]))
+                    
+
 
 #below are sample class and main        
 class MyFrame(wx.Frame):
