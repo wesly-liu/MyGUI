@@ -14,7 +14,7 @@ def size(jpg,now_size):
         splitName=os.path.splitext(jpg)
         fileName=splitName[0]+"-s"+splitName[1]
         resizedIm.save(fileName)
-        return True
+        return fileName
     else:
         print('无需缩放')
         return False

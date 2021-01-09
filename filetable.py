@@ -33,7 +33,8 @@ class FileTable(MyTable):
 
         # 设置行为按行选，开始觉得没用，后来设置gird为只读后看出效果了
         self.SetSelectionMode(wx.grid.Grid.GridSelectRows)
-        self.popupmenu = wx.Menu()  # 创建一个菜单
+        
+        self.popupmenu = wx.Menu()  # 创建一个弹出菜单
         # 创建一个菜单项，这里前面的&和后面的\tCtrl+V只是为了显示有快捷键
         pasteMenu = self.popupmenu.Append(-1, "&Paste from clipboard\tCtrl+V")
         copyMenu = self.popupmenu.Append(-1, "&Copy file\tCtrl+C")
@@ -42,6 +43,7 @@ class FileTable(MyTable):
         openFolderMenu = self.popupmenu.Append(-1, "Open folder")
         self.Bind(wx.EVT_MENU, self.openFolder, openFolderMenu)  # 将菜单绑定给一个函数
         openFileMenu = self.popupmenu.Append(-1, "Open selected file")
+        self.popupmenu.GetMenuItems()
         self.Bind(wx.EVT_MENU, self.openFile, openFileMenu)  # 将菜单绑定给一个函数
         self.Bind(wx.EVT_MENU, self.pasteFromClipboard, pasteMenu)
         self.Bind(wx.EVT_MENU, self.copyFile, copyMenu)
@@ -75,9 +77,10 @@ class FileTable(MyTable):
         self.PopupMenu(self.popupmenu, pos)
 
     def OnGridLabelLeftClick(self, event):
-        col = event.GetCol()
-        self.SetOrderBy(col, self.desc, orderBy=col)#Because column 0 is filename, 1 is size and it is number, 1 is datetime so it is 2
-        self.desc = not self.desc
+        event.Skip()
+        # col = event.GetCol()
+        # self.SetOrderBy(col, self.desc, orderBy=col)#Because column 0 is filename, 1 is size and it is number, 1 is datetime so it is 2
+        # self.desc = not self.desc
 
     def pasteFromClipboard(self, event):
         currentList = []
@@ -86,8 +89,8 @@ class FileTable(MyTable):
         result = paste2List(currentList, self.exts)
         try:
             self.DeleteRows(0, self.GetNumberRows())
-        except:
-            print('Error')
+        except Exception as e:
+            print (str(e))
         self.AppendRows(len(result))
         for i in range(len(result)):
             self.SetCellValue(i, 0, result[i])

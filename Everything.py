@@ -47,8 +47,10 @@ class Everything:
     #setup search
     def setupSearch(self,searchText):
         self.everything_dll.Everything_SetMatchPath(True)
+        # self.everything_dll.Everything_SetSort(14)
         self.everything_dll.Everything_SetSearchW(searchText)
         self.everything_dll.Everything_SetRequestFlags(EVERYTHING_REQUEST_FILE_NAME | EVERYTHING_REQUEST_PATH | EVERYTHING_REQUEST_SIZE | EVERYTHING_REQUEST_DATE_MODIFIED)
+        
     
     #execute the query    
     def executeSearch(self):
@@ -114,6 +116,7 @@ class Everything:
     def getResult(self,searchStr):
         '''result是一个Tuple Set'''
         self.setupSearch(searchStr)
+        # self.everything_dll.Everything_SetRequestFlags(77)
         self.executeSearch()
         self.getNumResult()
         num=self.num_results
@@ -130,20 +133,10 @@ class Everything:
             if self.file_size.value==18446744073709551615:
                 self.file_size.value=0
             fullName=format(ctypes.wstring_at(self.filename))
-            # fileName=os.path.basename(fullName)
-            # fileDir=os.path.dirname(fullName)
-            
-            # if not os.path.isdir(fullName):
             d=(fullName,str(self.file_size.value),self.get_time(self.date_modified_filetime))
             result.add(d)
-                # d={"FileName":fileName,"FileDir":fileDir,"DateModified":self.get_time(self.date_modified_filetime),"FileSize":self.file_size.value}
-            # d=set()
-            # d.add(fullName)
-            # d.add(str(self.file_size.value))
-            # d.add(self.get_time(self.date_modified_filetime))
-            # d=[fullName,str(self.file_size.value),self.get_time(self.date_modified_filetime)]
-            #print(self.get_time(self.date_modified_filetime))
-            #print(self.file_size)
+            # d={"FileName":fileName,"FileDir":fileDir,"DateModified":self.get_time(self.date_modified_filetime),"FileSize":self.file_size.value}
+
 
         return result      
 
